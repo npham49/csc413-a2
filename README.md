@@ -14,7 +14,7 @@ This Arduino program implements a genetics calculator that demonstrates Mendel's
 
 Please find the wiring for this prototype as following:
 
-![Prototype Wiring](prototype_wiring.JPG)
+![Prototype Wiring](/assets/prototype_wiring.png)
 
 ### Key Functions
 
