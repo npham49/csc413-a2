@@ -68,6 +68,10 @@ void loop() {
         Serial.println("Gene: Bb");
       } else if (tagID == 1373211835 || tagID == 6) {
         Serial.println("Gene: bb");
+      } else if (tagID == 1914642691) {
+        Serial.println("Object: Pea");
+      } else if (tagID == 3720130050) {
+        Serial.println("Object: Tomato");
       }
 
       mfrc522[reader].PICC_HaltA();      // Halt the card
