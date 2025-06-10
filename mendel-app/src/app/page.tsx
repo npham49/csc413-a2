@@ -6,6 +6,7 @@ interface TagData {
   gene: string;
   shape: string;
   color: string;
+  object: string;
 }
 
 export default function Home() {
@@ -13,11 +14,13 @@ export default function Home() {
     gene: "",
     shape: "",
     color: "",
+    object: "",
   });
   const [reader1, setReader1] = useState<TagData>({
     gene: "",
     shape: "",
     color: "",
+    object: "",
   });
   const [lastReader, setLastReader] = useState<0 | 1 | null>(null);
 
@@ -65,6 +68,16 @@ export default function Home() {
           setReader1((prev) => ({ ...prev, color }));
         }
       }
+
+      const objectMatch = message.match(/Object:\s*(\w+)/);
+      if (objectMatch) {
+        const object = objectMatch[1];
+        if (lastReader === 0) {
+          setReader0((prev) => ({ ...prev, object }));
+        } else {
+          setReader1((prev) => ({ ...prev, object }));
+        }
+      }
     };
 
     return () => eventSource.close();
@@ -72,7 +85,13 @@ export default function Home() {
 
   return (
     <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4">RFID Reader Dashboard</h1>
+      <div className="flex flex-col items-center mb-8">
+        <h1 className="text-2xl font-bold mb-4">Mendel Dashboard</h1>
+        <h1 className="text-3xl font-mono text-white-800">
+          Object: {reader0.object || reader1.object || "Waiting..."}
+        </h1>
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         {/* Reader 0 */}
         <div className="bg-white border rounded p-4">

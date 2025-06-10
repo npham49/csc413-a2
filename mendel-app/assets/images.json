@@ -1,0 +1,23 @@
+{
+    "pea": {
+        "default": "default.png",
+        "green": {
+            "inflated": "pea-green-inflated.png",
+            "constricted": "pea-green-constricted.png"
+        },
+        "yellow": {
+            "inflated": "pea-yellow-inflated.png",
+            "constricted": "pea-yellow-constricted.png"
+        }
+    },
+    "tomato": {
+        "red": {
+            "round": "tomato-red-ripe.png",
+            "long": "tomato-red-unripe.png"
+        },
+        "yellow": {
+            "round": "tomato-yellow-ripe.png",
+            "long": "tomato-yellow-unripe.png"
+        }
+    }
+}
