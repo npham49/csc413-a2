@@ -13,18 +13,16 @@ function getGametes(gene: string): string[] {
 }
 
 function getPhenotype(genotype: string): string {
-  const aGene = genotype[0] + genotype[2]; // A/a
-  const bGene = genotype[1] + genotype[3]; // B/b
+  const aGene = genotype.slice(0, 2);
+  const bGene = genotype.slice(2, 4);
 
-  const shape =
-    aGene.includes("a") && !aGene.includes("A") ? "green" : "yellow";
-  const color =
-    bGene.includes("b") && !bGene.includes("B") ? "constricted" : "inflated";
+  const shape = aGene === "aa" ? "constricted" : "inflated";
+  const color = bGene === "bb" ? "green" : "yellow";
 
-  return `${color} ${shape}`;
+  return `${shape} ${color}`;
 }
 
-export default function PunnettTable({
+function PunnettTable({
   parent1,
   parent2,
 }: {
@@ -66,7 +64,13 @@ export default function PunnettTable({
                 {rGamete}
               </th>
               {colGametes.map((cGamete, colIdx) => {
-                const genotype = `${rGamete[0]}${cGamete[0]}${rGamete[1]}${cGamete[1]}`; // AABB order
+                const aAlleles = [rGamete[0], cGamete[0]].sort((a, b) =>
+                  a === "A" ? -1 : 1
+                );
+                const bAlleles = [rGamete[1], cGamete[1]].sort((a, b) =>
+                  a === "B" ? -1 : 1
+                );
+                const genotype = `${aAlleles.join("")}${bAlleles.join("")}`;
                 const phenotype = getPhenotype(genotype);
                 return (
                   <td
@@ -86,3 +90,4 @@ export default function PunnettTable({
     </div>
   );
 }
+export default PunnettTable;
