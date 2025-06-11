@@ -23,7 +23,7 @@ app.get("/events", (req, res) => {
 });
 
 // Replace with your correct serial port path
-const port = new SerialPort({ path: "/dev/cu.usbmodem21101", baudRate: 9600 }); // ✅ Fixed
+const port = new SerialPort({ path: "/dev/cu.usbmodem1101", baudRate: 9600 }); // ✅ Fixed
 const parser = port.pipe(new ReadlineParser({ delimiter: "\n" }));
 
 parser.on("data", (line) => {

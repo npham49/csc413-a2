@@ -56,21 +56,21 @@ void loop() {
         Serial.println("Shape: Round");
       } else if (tagID == 3519786502 || tagID == 4056526342) {
         Serial.println("Shape: Long");
-      } else if (tagID == 2166009862 || tagID == 1) {
+      } else if (tagID == 2166009862 || tagID == 2975043913) {
         Serial.println("Gene: AA");
-      } else if (tagID == 2971185158 || tagID == 2) {
+      } else if (tagID == 2971185158 || tagID == 21729609) {
         Serial.println("Gene: Aa");
-      } else if (tagID == 560639750 || tagID == 3) {
+      } else if (tagID == 560639750 || tagID == 3512242505) {
         Serial.println("Gene: aa");
-      } else if (tagID == 1365815046 || tagID == 4) {
+      } else if (tagID == 1365815046 || tagID == 559255881) {
         Serial.println("Gene: BB");
-      } else if (tagID == 2170990342 || tagID == 5) {
+      } else if (tagID == 2170990342 || tagID == 558862665) {
         Serial.println("Gene: Bb");
-      } else if (tagID == 1373211835 || tagID == 6) {
+      } else if (tagID == 3780546889 || tagID == 827167049) {
         Serial.println("Gene: bb");
-      } else if (tagID == 1914642691) {
+      } else if (tagID == 3242955081) {
         Serial.println("Object: Pea");
-      } else if (tagID == 3720130050) {
+      } else if (tagID == 3780284745) {
         Serial.println("Object: Tomato");
       }
 

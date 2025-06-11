@@ -9,11 +9,15 @@
 #define SS_1_PIN 10
 #define SS_2_PIN 8
 
+#define BUTTON_PIN 4
+
 #define NR_OF_READERS 2
 byte ssPins[] = {SS_1_PIN, SS_2_PIN};
 MFRC522 mfrc522[NR_OF_READERS];
 
 LiquidCrystal_I2C lcd(0x27,  16, 2);
+
+int buttonState = 0;
 
 // State 0 read 11
 // State 1 read 12
@@ -27,6 +31,7 @@ LiquidCrystal_I2C lcd(0x27,  16, 2);
 int state = 0;
 bool just_changed = true;
 String f1_result;
+String f1_ratio;
 String f2_result;
 
 String input11;
@@ -289,11 +294,11 @@ void checkError(String input, String expected1, String expected2) {
 // Example usage function
 void setup() {
   Serial.begin(9600);
+  // pinMode(BUTTON_PIN, INPUT);
   while (!Serial)
     ; // Wait for serial connection (for Leonardo/Micro)
 
   SPI.begin(); // Initialize SPI bus
-
   // Initialize each reader
   for (uint8_t reader = 0; reader < NR_OF_READERS; reader++) {
     mfrc522[reader].PCD_Init(ssPins[reader], RST_PIN);
@@ -302,6 +307,7 @@ void setup() {
     Serial.print(F(" initialized on SS pin "));
     Serial.println(ssPins[reader]);
   }
+
 
   lcd.init();
   // turn on the backlight
@@ -356,24 +362,28 @@ void setupReaders() {
         Serial.println("Shape: Round");
       } else if (tagID == 3519786502 || tagID == 4056526342) {
         Serial.println("Shape: Long");
-      } else if (tagID == 2166009862 || tagID == 1) {
+      } else if (tagID == 2166009862 || tagID == 2975043913) {
         Serial.println("Gene: AA");
         readInput("AA");
-      } else if (tagID == 2971185158 || tagID == 2) {
+      } else if (tagID == 2971185158 || tagID == 21729609) {
         Serial.println("Gene: Aa");
         readInput("Aa");
-      } else if (tagID == 560639750 || tagID == 3) {
+      } else if (tagID == 560639750 || tagID == 3512242505) {
         Serial.println("Gene: aa");
         readInput("aa");
-      } else if (tagID == 1365815046 || tagID == 4) {
+      } else if (tagID == 1365815046 || tagID == 559255881) {
         Serial.println("Gene: BB");
         readInput("BB");
-      } else if (tagID == 2170990342 || tagID == 5) {
+      } else if (tagID == 2170990342 || tagID == 558862665) {
         Serial.println("Gene: Bb");
         readInput("Bb");
-      } else if (tagID == 1373211835 || tagID == 6) {
+      } else if (tagID == 3780546889 || tagID == 827167049) {
         Serial.println("Gene: bb");
         readInput("bb");
+      } else if (tagID == 3242955081) {
+        Serial.println("Object: Pea");
+      } else if (tagID == 3780284745) {
+        Serial.println("Object: Tomato");
       }
 
       mfrc522[reader].PICC_HaltA();      // Halt the card
@@ -403,8 +413,32 @@ void askUserForInputAtState(int state) {
 }
 
 void loop() {
+  int prev_state = state;
+
   setupReaders();
   askUserForInputAtState(state);
+
+  // buttonState = digitalRead(BUTTON_PIN);
+  // if (buttonState == HIGH) {
+  //   Serial.println("Reset pressed");
+  //   lcd.clear();
+  //   lcd.setCursor(0,0);
+  //   lcd.print("Resetting...");
+  //   delay(1000);
+  //   input1 = "";
+  //   input2 = "";
+  //   input3 = "";
+  //   input11 = "";
+  //   input12 = "";
+  //   input21 = "";
+  //   input22 = "";
+  //   input31 = "";
+  //   input32 = "";
+  //   f1_result = "";
+  //   f1_ratio = "";
+  //   f2_result = "";
+  //   state = 0;
+  // }
 
   if (just_changed) {
     lcd.clear();
@@ -412,6 +446,7 @@ void loop() {
     if (state==4) { 
 
       f1_result = mendelF1Generator(input1,input2);
+      f1_ratio = calculateF2Ratio(input1, input2);
       //wait  for a second
       delay(1000);
       // tell the screen to write on the top row
@@ -422,7 +457,25 @@ void loop() {
       lcd.setCursor(0,1);
       // tell the screen to write "Arduino_uno_guy"  on the bottom row
       // you can change whats in the quotes to be what you want  it to be!
-      lcd.print("F1= " + f1_result);
+      lcd.print("F1 Ratio= " + f1_ratio + " F1:" + f1_result);
+      // scroll 29 positions (string length + display length) to the right
+      // to move it offscreen right:
+      for (int positionCounter = 0; positionCounter < 7; positionCounter++) {
+        // scroll one position right:
+        lcd.scrollDisplayLeft();
+        // wait a bit:
+        delay(500);
+      }
+    
+      // scroll 16 positions (display length + string length) to the left
+      // to move it back to center:
+      for (int positionCounter = 7; positionCounter > 0; positionCounter--) {
+        // scroll one position left:
+        lcd.scrollDisplayRight();
+        // wait a bit:
+        delay(500);
+      }
+
 
       just_changed = false;
       state = 5;
@@ -451,7 +504,7 @@ void loop() {
       // wait for 1 second
       delay(1000);
       // go back to state 0
-      state = 0;
+      state = prev_state;
       just_changed = true;
     }
     just_changed = false;

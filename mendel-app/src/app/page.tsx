@@ -123,13 +123,13 @@ export default function Home() {
             Color: {reader1.color || "Waiting..."}
           </p>
         </div>
-        {reader0.gene.length === 4 && reader1.gene.length === 4 && (
+      </div>
+      {reader0.gene.length === 4 && reader1.gene.length === 4 && (
           <div>
             <h1>Table</h1>
             <PunnettTable parent1={reader0.gene} parent2={reader1.gene} />
           </div>
         )}
-      </div>
     </main>
   );
 }
